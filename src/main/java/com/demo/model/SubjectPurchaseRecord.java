@@ -2,12 +2,12 @@ package com.demo.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -17,8 +17,6 @@ import javax.persistence.SequenceGenerator;
  */
 @Entity
 public class SubjectPurchaseRecord {
-
-
 	private Integer id;//ID
 	private String serial_number;//流水号
 	private Double amount;//购买金额
@@ -33,6 +31,13 @@ public class SubjectPurchaseRecord {
 	private Integer pay_interest_times;//0
 	private Integer last_profit_day;//最后计息日
 	private String bonus_info;//红包金额信息（app端实际投资额度+红包额度）
+	private Integer  status;
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
 	@Id
 	@SequenceGenerator(name="subject_purchase_record",sequenceName="seq_subject_purchase_record",allocationSize=1)
 	@GeneratedValue(generator="subject_purchase_record",strategy=GenerationType.SEQUENCE)
