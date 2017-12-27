@@ -61,7 +61,7 @@ public class UsersHander {
 	@ResponseBody
 	public Map<String,Object> login(@RequestParam("userName")String userName,@RequestParam("password") String password ,@RequestParam("mobilePhone")String mobilePhone,Integer code, HttpServletRequest request,HttpServletResponse response) throws IOException { 
 		Map<String,Object> map = new HashMap<String,Object>();
-//		Users users = usersService.findUser(userName, password);
+		
 //		if(users==null){
 //			map.put("msg","用户名或密码错误");
 //			map.put("islogin",1);
@@ -90,7 +90,8 @@ public class UsersHander {
             	System.out.println("登录失败: " + ae.getMessage());
             }
         }
-//		request.getSession().setAttribute("loginUsers", users);
+		Users users = usersService.findUser(userName, password);
+		request.getSession().setAttribute("loginUsers", users);
 		map.put("iscode",0);
 		return map;
 	}
