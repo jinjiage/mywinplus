@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,6 +26,8 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.demo.model.OverseaConfig;
 import com.demo.model.SysType;
+import com.demo.model.UserRoleRelation;
+import com.demo.model.Users;
 import com.demo.service.jinge.OverseaConfigService;
 import com.demo.service.jinge.OverseaConfigSubscribeService;
 import com.demo.service.jinge.SysTypeService;
@@ -68,18 +72,20 @@ public class OverseaSysHander {
 		return "/main/finance/overseaadd";
 	}
 	@RequestMapping(value="/overseaConfig", method=RequestMethod.POST)
-	public String overseaConfigAdd(@RequestParam CommonsMultipartFile avatar_link,OverseaConfig overseaConfig,HttpServletRequest request)
+	public String overseaConfigAdd(OverseaConfig overseaConfig,HttpServletRequest request)
 	{
-		String name = avatar_link.getOriginalFilename();
-		InputStream is = null;
-		String path = request.getRealPath("upload")+"\\"+name;
-		try{
-			is=avatar_link.getInputStream();
-			FileUtils.copyInputStreamToFile(is, new File(path));
-
-		}catch(Exception e){}
-		if(name!=null)
-		overseaConfig.setOversea_icon("upload/"+name);
+//		if(avatar_link!=null){
+//		String name = avatar_link.getOriginalFilename();
+//		InputStream is = null;
+//		String path = request.getRealPath("upload")+"\\"+name;
+//		try{
+//			is=avatar_link.getInputStream();
+//			FileUtils.copyInputStreamToFile(is, new File(path));
+//
+//		}catch(Exception e){}
+//		if(name!=null)
+//		overseaConfig.setOversea_icon("upload/"+name);
+//		}
 		if(overseaConfig.getId()!=null){
 			overseaConfig.setUpdtime(new Date());
 		}else{
@@ -87,7 +93,14 @@ public class OverseaSysHander {
 		overseaConfigService.saveOver(overseaConfig);
 		return "redirect:/overseaSys/overseaConfig";
 	}
-
+	@ModelAttribute
+	public void getUser(@RequestParam(value="id",required=false) Integer id, Map<String, Object> map){
+		if(id != null){
+			//模拟从数据库中获取对象
+			OverseaConfig overseaConfig = overseaConfigService.getOne(id);			 
+			map.put("overseaConfig", overseaConfig);
+		}
+	}
 	@InitBinder    
 	public void initBinder(WebDataBinder binder) {    
 		binder.registerCustomEditor(Date.class, 

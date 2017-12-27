@@ -1,5 +1,6 @@
 package com.demo.controller.jinge;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +10,11 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,7 +35,7 @@ public class AccountSecurityHander {
 	MemberService memberService;
 	@ResponseBody
 	@RequestMapping(value="/addBankCard", method=RequestMethod.POST)
-	public Map<String,Object> addBankCard(String userName, String identity, String bankCard, String type, String 
+	public Map<String,Object> addBankCard(@RequestParam("userName")String userName,@RequestParam("identity") String identity,@RequestParam("bankCard") String bankCard,@RequestParam("type") String type,@RequestParam("cardaddress") String 
 			cardaddress ,HttpServletRequest request)
 	{
 		Member crtMember = (Member) request.getSession().getAttribute("memberInfo");
@@ -42,17 +46,16 @@ public class AccountSecurityHander {
 		if (!matcher.find()) {
 			map.put("msg", "身份证格式不正确!");
 		} else {
-			int[] weights = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
-			String[] parityBits = { "1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2" };
-			int power = 0;
-			for (int i = 0; i < 17; i++) {
-				power += Integer.parseInt(String.valueOf(identity.charAt(i)), 10) * weights[i];
-			}
-			if (!parityBits[(power % 11)].equals(identity.substring(17))) {
-				map.put("msg", "请输入正确的身份证号码!");
-			} else {
-
-				if(crtMember.getIdentity().equals(identity)){
+//			int[] weights = { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
+//			String[] parityBits = { "1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2" };
+//			int power = 0;
+//			for (int i = 0; i < 17; i++) {
+//				power += Integer.parseInt(String.valueOf(identity.charAt(i)), 10) * weights[i];
+//			}
+//			if (!parityBits[(power % 11)].equals(identity.substring(17))) {
+//				map.put("msg", "请输入正确的身份证号码!");
+//			} else {
+				if(memberService.findMemberByIdentity(identity)!=null){
 					map.put("msg", "该身份证号码已被使用!");
 				}else{
 					String reg1 = "^(\\d{16}|\\d{19})$";
@@ -70,7 +73,9 @@ public class AccountSecurityHander {
 							cardInfo.setUpdate_date(new Date());
 							cardInfo.setType(type);
 							cardInfo.setCardaddress(cardaddress);
+							cardInfo.setDelflag(0);
 							memberBankCardService.addBankCard(cardInfo);
+							map.put("code", 0);
 							map.put("msg", "绑定银行卡成功");
 						}else{
 							map.put("msg", "银行卡已被使用绑定，绑定失败");
@@ -78,7 +83,7 @@ public class AccountSecurityHander {
 					}
 				}
 
-			}
+		//	}
 		}
 		return map;
 	}
@@ -125,4 +130,9 @@ public class AccountSecurityHander {
 		}
 		return map;
 	  }
+	@InitBinder    
+	public void initBinder(WebDataBinder binder) {    
+		binder.registerCustomEditor(Date.class, 
+				new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));    
+	}
 }

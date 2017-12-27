@@ -109,13 +109,13 @@
 								<c:when test="${object[9]==2 }">回款中</c:when>
 								<c:when test="${object[9]==3 }">还款完成</c:when>
 							</c:choose></td>
-						<td>${object[10]==1?"是":"否" }</td>
+						<td>${object[10]==0?"是":"否" }</td>
 						<td><f:formatDate pattern="yyyy-MM-dd" value="${object[11] }" />
 						</td>
 						<td><a class="btn btn-primary btn-sm"
 							href="<%=basePath%>subject/sys/editView/${object[0] }">编辑/查看</a>
 							<a class="btn btn-primary btn-sm"
-							href="<%=basePath%>subject/sys/subjectPurchase?subjcetId=${object[0] }">查看投资</a></td>
+							href="<%=basePath%>subject/sys/subjectPurchase?subjectId=${object[0] }">查看投资</a></td>
 					</tr>
 
 				</c:forEach>

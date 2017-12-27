@@ -21,7 +21,7 @@ public class MemberTradeRecord {
 	private String trade_no ;//交易号
 	private String trade_name ;//交易名称
 	private String counterpart ;//交易对方
-	private Integer amount ;//交易金额
+	private Double amount ;//交易金额
 	private String trade_type ;//交易分类
 	private Integer fund_flow ;//资金流向(0:流出1:流入)
 	private Integer trade_status  ;//交易状态
@@ -64,10 +64,11 @@ public class MemberTradeRecord {
 	public void setCounterpart(String counterpart) {
 		this.counterpart = counterpart;
 	}
-	public Integer getAmount() {
+	
+	public Double getAmount() {
 		return amount;
 	}
-	public void setAmount(Integer amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 	public String getTrade_type() {

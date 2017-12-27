@@ -16,4 +16,6 @@ public interface MemberService {
 
 	Member selectMemberByPhone(String mobile_Phone);
 
+	Member findMemberByIdentity(String identity);
+
 }

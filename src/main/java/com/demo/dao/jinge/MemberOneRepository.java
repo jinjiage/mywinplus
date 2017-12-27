@@ -17,4 +17,7 @@ public interface MemberOneRepository extends JpaRepository<Member, Integer> ,Jpa
 	public Member findMember(@Param("mobile_Phone") String mobile_Phone,@Param("password") String password);
 	@Query(value="select m from Member m where m.mobile_Phone = ?")
 	public Member findMemberByPhone(String mobile_Phone);
+	@Query(value="select m from Member m where m.identity = ?")
+	public Member findMemberByIdentity(String identity);
+	
 }

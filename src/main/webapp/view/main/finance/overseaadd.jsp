@@ -42,7 +42,7 @@
         <span class="glyphicon glyphicon-play" style="margin-right: 5px"></span>海外配置
     </h2>
 
-    <form action="<%=basePath%>overseaSys/overseaConfig" method="post" id="valForm" enctype="multipart/form-data">
+    <form action="<%=basePath%>overseaSys/overseaConfig" method="post" id="valForm" >
         <input type="hidden" name="id" value="">
         <div class="tablelist">
             <!-- 表单 -->
@@ -207,11 +207,10 @@
             'queueSizeLimit': 1,
             'fileObjName': 'file',
             'onUploadSuccess': function (file, data,response) {//每成功完成一次文件上传时触发一次
-                var image = eval("[" + data + ']')[0];
-                $(".uploadvedio").remove();
-                $('#avatar').append("<div id=" + image.msg + " class='uploadvedio'> <a href=<%=basePath%>" + image.msg + " target='_black'>" + image.msg + "</a> " +
-                        "<a href=javascript:delimg('" + image.msg + "','productManagerPic')>删除</a> </div>");
-                $("#productManagerPic").val(image.msg);
+                 $(".uploadvedio").remove();
+                $('#avatar').append("<div id=" + data + " class='uploadvedio'> <a href=<%=basePath%>" + data + " target='_black'> " + data  + "</a> " +
+                        "<a href=javascript:delimg('" + data  + "','productManagerPic')>删除</a> </div>");
+                $("#productManagerPic").val(data);
             },
             'onUploadError': function (file, data, response) {//当上传返回错误时触发
                 $('#avatar').append("<li>" + data + "</li>");
@@ -328,10 +327,10 @@
     function delimg(obj, tval) {
         var url = "<%=basePath%>upload/delimg";
         $.post(url, {'imgpath': obj}, function (data) {
-            if (data.code == 0) {
+         
                 document.getElementById(obj).remove();
                 document.getElementById(tval).value = "";
-            }
+            
         });
     }
 

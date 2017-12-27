@@ -88,8 +88,8 @@
         <f:formatNumber pattern="00.00" value="${memberAccount.imuseale_balance }"></f:formatNumber>
         </h2><p>冻结金额(元)<a href="javascript:;" class="iconfont">&#xe619;<span>提现冻结金额</span><i></i></a></p></li>
     </ul>
-    <a href="<%=basePath%>account/deposit" class="cz">充值</a>
-    <a href="<%=basePath%>account/withdraw" class="tk">提款</a>
+    <a href="<%=basePath%>account/deposit" class="cz" target="iFrame3">充值</a>
+    <a href="<%=basePath%>account/withdraw" class="tk" target="iFrame3">提款</a>
 </div>   
  <div class="proMain clearfix">
 <div class="adminLeft">

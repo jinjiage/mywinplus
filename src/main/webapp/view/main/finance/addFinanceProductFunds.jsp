@@ -660,7 +660,7 @@ $(function () {
             }
         });
      
-         $('#avatar_link').uploadify({
+<%--          $('#avatar_link').uploadify({
             'swf': '<%=basePath%>resources/uploadify/uploadify.swf', //指定上传控件的主体文件，默认‘uploader.swf’
             'uploader': '<%=basePath%>upload/fileupload', //指定服务器端上传处理文件
             'auto': true, //手动上传
@@ -682,10 +682,10 @@ $(function () {
                 $('#avatar').append("<li>" + data + "</li>");
 
             }
-        });
+        }); --%>
     }); 
 
-    <!--删除图片-->
+   <%--  <!--删除图片-->
     function delimg(obj, tval) {
         var url = "<%=basePath%>upload/delimg";
         $.post(url, {'imgpath': obj}, function (data) {
@@ -694,6 +694,6 @@ $(function () {
                 document.getElementById(tval).value = "";
             }
         });
-    }
+    } --%>
 </script>
 </html>

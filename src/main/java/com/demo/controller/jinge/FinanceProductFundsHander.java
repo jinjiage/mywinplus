@@ -56,7 +56,7 @@ public class FinanceProductFundsHander {
 	public String list(FinanceProductFunds financeProductFunds, @RequestParam(required=false, defaultValue="1") Integer page, @RequestParam(required=false, defaultValue="3") Integer pageSize, Model model) { 
 		Page finance =	financeProductFundsService.getfinanceProductFunds(financeProductFunds,page,pageSize) ;
 		List<Object[]> counts = financeProductSubscribeService.getCount();
-		List<SysType> financestaus = sysTypeService.find("financestaus");
+		List<SysType> financestaus = sysTypeService.find("financiastatus");
 		List<SysType> financetype = sysTypeService.find("financeproducttype");
 		model.addAttribute("finance",finance);
 		model.addAttribute("counts",counts);
@@ -68,7 +68,7 @@ public class FinanceProductFundsHander {
 	@RequestMapping(value="/addFinanceProductFundsPage", method=RequestMethod.GET)
 	public String toadd(Model model)
 	{
-		List<SysType> financestaus = sysTypeService.find("financestaus");
+		List<SysType> financestaus = sysTypeService.find("financiastatus");
 		List<SysType> financetype = sysTypeService.find("financeproducttype");
 		model.addAttribute("financestaus",financestaus);
 		model.addAttribute("financetype",financetype);
@@ -87,12 +87,16 @@ public class FinanceProductFundsHander {
 		}catch(Exception e){}
 		financeProductFunds.setProduct_manager_pic("upload"+name);
 		financeProductFunds.setCreate_date(new Date());
+		financeProductFunds.setUpdate_date(new Date());
 		financeProductFundsService.addFinanceProductFunds(financeProductFunds);
 		return "redirect:/financeProductFunds/list";
 	}
 	@RequestMapping(value="/updateFinanceProductFunds", method=RequestMethod.POST)
-	public String updateFinanceProductFunds(@RequestParam CommonsMultipartFile avatar_link,FinanceProductFunds financeProductFunds, HttpServletRequest request)
+	public String updateFinanceProductFunds(@RequestParam(value="avatar_link",required=false) CommonsMultipartFile avatar_link,FinanceProductFunds financeProductFunds, HttpServletRequest request)
 	{	 
+		if(avatar_link!=null){
+			
+		
 		String name = avatar_link.getOriginalFilename();
 		InputStream is = null;
 		String path = request.getRealPath("upload")+"\\"+name;
@@ -101,8 +105,10 @@ public class FinanceProductFundsHander {
 			FileUtils.copyInputStreamToFile(is, new File(path));
 
 		}catch(Exception e){}
+		
 		if(name!=null)
 			financeProductFunds.setProduct_manager_pic("upload"+name);
+		}
 		financeProductFunds.setUpdate_date(new Date());
 		financeProductFundsService.updateFinanceProductFunds(financeProductFunds);
 		return "redirect:/financeProductFunds/list";
@@ -111,7 +117,7 @@ public class FinanceProductFundsHander {
 	public String editPage(@PathVariable int financeProductFundsId, Model model, HttpServletRequest request)
 	{
 		FinanceProductFunds financeProductFunds = financeProductFundsService.selectByProductId(financeProductFundsId);
-		List<SysType> financestaus = sysTypeService.find("financestaus");
+		List<SysType> financestaus = sysTypeService.find("financiastatus");
 		List<SysType> financetype = sysTypeService.find("financeproducttype");
 		model.addAttribute("financestaus",financestaus);
 		model.addAttribute("financetype",financetype);
@@ -122,7 +128,6 @@ public class FinanceProductFundsHander {
 	public String financeProductSubscribe(Integer financeProductFundsId, @RequestParam(required=false, defaultValue="1") Integer page, @RequestParam(required=false, defaultValue="10") Integer pageSize, Model model)
 	{
 		Page financeProductFundsPage = financeProductSubscribeService.getPageFinanceProductSubscribe(page, pageSize, financeProductFundsId);
-
 		List<SysType> financesubscribestatus = sysTypeService.find("financeproductsubscribestatus");
 		model.addAttribute("financesubscribestatus", financesubscribestatus);
 		model.addAttribute("financeProductFundsPage", financeProductFundsPage);

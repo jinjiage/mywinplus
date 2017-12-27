@@ -52,6 +52,7 @@
 <input type="hidden" value="${ memberInfo }" id="memberIsTrue">
  <input type="hidden" id="subjectName" value="${getsubject.name }">
     <input type="hidden"  id="subjectId" value="${getsubject.id }">
+    <input type="hidden" value="${memberAccount.bonus_amount }" id="bonus_amount">
     <div class="proMain">
         <div class="conTit">
             <span><a style="color:#9d8440;" href="<%=basePath%>subject">其他标的</a></span>
@@ -121,8 +122,10 @@
                         <p class="preBox">
                             <input type="checkbox" id="registerRule" class="registerRule" checked="checked"><span
                                 class="fl">同意<a href="<%=basePath%>web/syxy" target="_black">《产品协议》</a></span>
-                                
-                                <button id="redPacket">使用红包</button>
+                               <c:if test="${!empty memberInfo }">
+                              <button id="redPacket">使用红包</button>
+                 
+                             </c:if>
                         </p>
                         <c:if test="${getsubject.status==1 }">
                          <button class="submit">确认抢购</button>
@@ -243,7 +246,7 @@ $(function () {
 
     var redPacket = $("#redPacket");
     var addMoney = $("#addMoney");
-
+    var  bonus_amount=$("#bonus_amount").val();
     var exists = $("#memberIsTrue").val();
     var authBankCard=false;
     		authBankCard=true;
@@ -254,7 +257,7 @@ $(function () {
                 addMoney.html("");
             } else {//未选中
                 redPacket.addClass("active");
-                addMoney.html("+"+0);
+                addMoney.html("+"+bonus_amount);
             }
         });
 
@@ -299,7 +302,7 @@ $(function () {
                 }
             }
             if (redPacket.hasClass("active")) {//选中红包
-                bonusFee =0;
+                bonusFee =$("#bonus_amount").val();
             }
             $.ajax({
                 type: "POST", // 用POST方式传输
@@ -309,7 +312,9 @@ $(function () {
                 data: {
                 	 subjectId:$('#subjectId').val(),
                      subjectName:$('#subjectName').val(),
-                     totalFee: value
+                     totalFee: value,
+                     bonusFee: bonusFee,
+                     bbinStatus:0
                 },
                 success: function (msg) {
                     if (msg.code == 0) {

@@ -40,5 +40,10 @@ public class MemberServiceImpl implements MemberService {
 		// TODO Auto-generated method stub
 		return memberRepository.findMemberByPhone(mobile_Phone);
 	}
+
+	public Member findMemberByIdentity(String identity) {
+		// TODO Auto-generated method stub
+		return memberRepository.findMemberByIdentity(identity);
+	}
 	
 }

@@ -42,7 +42,7 @@
         <span class="glyphicon glyphicon-play" style="margin-right: 5px"></span>海外配置
     </h2>
 
-    <form action="<%=basePath%>overseaSys/overseaConfig" method="post" id="valForm" enctype="multipart/form-data">
+    <form action="<%=basePath%>overseaSys/overseaConfig" method="post" id="valForm" >
         <input type="hidden" name="id" value="${overseaConfig.id }">
         <div class="tablelist">
             <!-- 表单 -->

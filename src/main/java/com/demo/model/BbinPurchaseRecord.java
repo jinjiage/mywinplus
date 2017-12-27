@@ -10,7 +10,7 @@ import javax.persistence.SequenceGenerator;
 @Entity
 public class BbinPurchaseRecord {
 	private Integer	id ;
-	private Integer	  serial_number ;//流水号
+	private String	  serial_number ;//流水号
 	private Double		  amount ;//购买金额
 	private String		  deal_ip ;//交易ip'
 	private Integer	  subject_id ;//标的Id'
@@ -31,10 +31,12 @@ public class BbinPurchaseRecord {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Integer getSerial_number() {
+
+
+	public String getSerial_number() {
 		return serial_number;
 	}
-	public void setSerial_number(Integer serial_number) {
+	public void setSerial_number(String serial_number) {
 		this.serial_number = serial_number;
 	}
 	public Double getAmount() {
@@ -103,5 +105,5 @@ public class BbinPurchaseRecord {
 	public void setLast_profit_day(Integer last_profit_day) {
 		this.last_profit_day = last_profit_day;
 	}
-	
+
 }

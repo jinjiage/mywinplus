@@ -19,12 +19,11 @@
 </head>
 <body>
 <div class="box-right-main">
+
         <h2><span class="glyphicon glyphicon-play" style="margin-right:5px"></span>投资记录</h2>
-	<form
-			action="<%=basePath%>financeProductFunds/financeProductSubscribe"
-			method="post" id="form1">
-				 <input type="hidden"
-				id="pageid" name="page">
+	<form action="<%=basePath%>subject/sys/subjectPurchase" method="get" id="form1">
+	<input type="hidden" value="${subjectId}" name="subjectId">
+		<input type="hidden" id="pageid" name="page">
 		</form>
         <div class="tablelist">
             <table class="table table-bordered tablebox">
@@ -76,7 +75,7 @@
 <li><a class="now" href="javascript:fun(1);" >首页</a></li>
 						<li><a class="prev_page" href="javascript:fun(${subjects.getNumber()+1-1>=1?subjects.getNumber():subjects.getNumber()+1 });">上页</a></li>
 
-						<li><a class="next_page" rel="next" href="javascript:fun(${subjects.getNumber()+1+1<subjects.getTotalPages()?subjects.getNumber()+1+1:subjects.getTotalPages() })">下页</a></li>
+						<li><a class="next_page" rel="next" href="javascript:fun(${subjects.getNumber()+1+1<subjects.getTotalPages()?subjects.getNumber()+1+1:subjects.getTotalPages() });">下页</a></li>
 						<li><a class="now" href="javascript:fun(${subjects.getTotalPages() });" >尾页</a></li>
 				</ul>
 			</nav>

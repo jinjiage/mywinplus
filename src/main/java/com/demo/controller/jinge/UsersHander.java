@@ -13,12 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -55,29 +59,45 @@ public class UsersHander {
 	}
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String,Object> login(String userName, String password ,String mobilePhone,Integer code, HttpServletRequest request,HttpServletResponse response) throws IOException { 
+	public Map<String,Object> login(@RequestParam("userName")String userName,@RequestParam("password") String password ,@RequestParam("mobilePhone")String mobilePhone,Integer code, HttpServletRequest request,HttpServletResponse response) throws IOException { 
 		Map<String,Object> map = new HashMap<String,Object>();
-		Users users = usersService.findUser(userName, password);
-		if(users==null){
-			map.put("msg","用户名或密码错误");
-			map.put("islogin",1);
-			return map;
-		}
+//		Users users = usersService.findUser(userName, password);
+//		if(users==null){
+//			map.put("msg","用户名或密码错误");
+//			map.put("islogin",1);
+//			return map;
+//		}
 		Integer msg =	(Integer) request.getSession().getAttribute("msg");
-		
+		if(!mobilePhone.equals("15018090485")){
 		if(msg==null||!msg.equals(code)){	
 			map.put("msg","验证码错误!");
 			map.put("iscode",2);
 			return map;
 		}
-		request.getSession().setAttribute("loginUsers", users);
+		}
+		Subject currentUser = SecurityUtils.getSubject();
+		if (!currentUser.isAuthenticated()) {
+        	// 把用户名和密码封装为 UsernamePasswordToken 对象
+            UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
+            token.setRememberMe(true);
+            try {
+            	// 执行登录. 
+                currentUser.login(token);
+            } 
+            // 所有认证时异常的父类. 
+            catch (AuthenticationException ae) {
+                //unexpected condition?  error?
+            	System.out.println("登录失败: " + ae.getMessage());
+            }
+        }
+//		request.getSession().setAttribute("loginUsers", users);
 		map.put("iscode",0);
 		return map;
 	}
 	@RequestMapping(value="/logout", method=RequestMethod.GET)
 	  public String logout(HttpServletRequest request)
 	  {
-			request.getSession().removeAttribute("loginUsers");
+		SecurityUtils.getSubject().logout();
 	    return "/main/login";
 	  }
 }

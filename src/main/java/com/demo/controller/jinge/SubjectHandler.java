@@ -81,9 +81,7 @@ public class SubjectHandler {
 			request.setAttribute("enddate2", enddate2);
 			return "/index/subject/subjectpromain";
 		}
-
 		return "/index/subject/subjecttype";
-
 	}
 	@RequestMapping(method=RequestMethod.GET)
 	  public String index()

@@ -123,14 +123,14 @@ public class SubjectSysHander {
 		return map;
 	  }
 	 @RequestMapping(value="/subjectPurchase", method=RequestMethod.GET)
-	  public String subjectPurchase(Integer subjcetId, @RequestParam(required=false, defaultValue="1") Integer page, @RequestParam(required=false, defaultValue="20") Integer pageSize, Model model)
+	  public String subjectPurchase(Integer subjectId, @RequestParam(required=false, defaultValue="1") Integer page, @RequestParam(required=false, defaultValue="20") Integer pageSize, Map<String,Object> map)
 	  {
-	    Page subjects = subjectPurchaseRecordService.getPurchaseRecord(subjcetId, page, pageSize);
+	    Page subjects = subjectPurchaseRecordService.getPurchaseRecord(subjectId, page, pageSize);
 	   
 	    List<Member> memberlist= memberServices.selectlist();
-	    model.addAttribute("subjects",subjects);
-	    model.addAttribute("memberlist",memberlist);   
-	    model.addAttribute("subjectId", subjcetId);
+	   map.put("subjects",subjects);
+	   map.put("memberlist",memberlist);   
+	   map.put("subjectId", subjectId);
 	    return "/main/finance/purchase";
 	  }
 	 @InitBinder    

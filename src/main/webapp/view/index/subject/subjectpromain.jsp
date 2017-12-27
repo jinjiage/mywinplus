@@ -50,6 +50,8 @@
 </head>
 <body>
 <input type="hidden" value="${memberInfo }" id="memberIsTrue">
+<input type="hidden" value="${memberAccount.bbin_amount }" id="bbin_amount">
+<input type="hidden" value="${memberAccount.bonus_amount }" id="bonus_amount">
 <div class="proMain">
     <div class="conTit">
     <input type="hidden" id="subjectName" value="${getsubject.name }">
@@ -253,6 +255,9 @@
             var authBankCard=false;
             		authBankCard=true;
                  //使用红包
+                 var  bonus_amount=$("#bonus_amount").val();
+                 var  bbin_amount=$("#bbin_amount").val();
+                 
                  $("#redPacket").click(function () {
                      if (redPacket.hasClass("active")) {//选中
                          redPacket.removeClass("active");
@@ -260,7 +265,7 @@
                          bbinAll.removeAttr("disabled");
                      } else {//未选中
                          redPacket.addClass("active");
-                         addMoney.html("+" +0);
+                         addMoney.html("+" +bonus_amount);
                          bbinAll.attr("disabled", "disabled");
                      }
                  });
@@ -273,7 +278,7 @@
                          redPacket.removeAttr("disabled");
                      } else {//未选中
                          bbinAll.addClass("active");
-                         mytext.val(8888);
+                         mytext.val(bbin_amount);
                          mytext.attr("readonly", "readonly");
                          redPacket.attr("disabled", "disabled");
                      }
@@ -314,23 +319,23 @@
                 $(".li4").show(100);
                 return false;
             }
-            var bonusFee = 0;
-            var bbinStatus = 0;
-            if (!(bbinAll.hasClass("active"))) {//未选中体验金
-                var acountval = $("#account").val();
-                if (acountval != -1) {
-                    if ((acountval - value) < 0) {
-                        $("#checkmoney").html("账号余额不足，请充值");
-                        $(".li4").show(100);
-                        return false;
+                var bonusFee = 0;
+                var bbinStatus = 0;
+                if (!(bbinAll.hasClass("active"))) {//未选中体验金
+                    var acountval = $("#account").val();
+                    if (acountval != -1) {
+                        if ((acountval - value) < 0) {
+                            $("#checkmoney").html("账号余额不足，请充值");
+                            $(".li4").show(100);
+                            return false;
+                        }
                     }
+                    if (redPacket.hasClass("active")) {//选中红包
+                        bonusFee =$("#bonus_amount").val();
+                    }
+                } else {
+                    bbinStatus = 1;
                 }
-                if (redPacket.hasClass("active")) {//选中红包
-                    bonusFee =0;
-                }
-            } else {
-                bbinStatus = 1;
-            }
 
             $.ajax({
                 type: "POST", // 用POST方式传输
@@ -339,12 +344,13 @@
                 data: {
                     subjectId:$('#subjectId').val(),
                     subjectName:$('#subjectName').val(),
-                    totalFee: value
-
+                    totalFee: value,
+                    bonusFee: bonusFee,
+                    bbinStatus: bbinStatus
                 },
                 success: function (msg) {
                     if (msg.code == 0) {
-                    	window.location.href = "<%=basePath%>subjectPur/orderView?tradeNo="+msg.msg;
+                    	window.location.href = "<%=basePath%>subjectPur/orderView?tradeNo="+msg.msg+"&bbinStatus=" + msg.bbinStatus;
                     } else {
                         $("#checkmoney").html(msg.msg);
                         $(".li4").show(100);
